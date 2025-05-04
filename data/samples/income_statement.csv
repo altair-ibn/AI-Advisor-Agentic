@@ -1,0 +1,24 @@
+Report_Type,Income Statement
+Report_Period,Q1 2023
+Client_Name,Acme Corporation
+Report_Date,2023-03-31
+
+Item,Category,Amount
+Revenue,Income,4500000
+Cost of Goods Sold,Expense,1800000
+Gross Profit,Profit,2700000
+Research and Development,Expense,450000
+Sales and Marketing,Expense,550000
+General and Administrative,Expense,380000
+Total Operating Expenses,Expense,1380000
+Operating Income,Profit,1320000
+Interest Income,Income,45000
+Interest Expense,Expense,120000
+Other Income (Expense),Income,25000
+Income Before Tax,Profit,1270000
+Income Tax Expense,Expense,317500
+Net Income,Profit,952500
+Earnings Per Share (Basic),Metric,1.95
+Earnings Per Share (Diluted),Metric,1.87
+Weighted Average Shares Outstanding (Basic),Metric,487500
+Weighted Average Shares Outstanding (Diluted),Metric,508000 

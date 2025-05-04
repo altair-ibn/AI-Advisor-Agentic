@@ -1,0 +1,47 @@
+ABC CORPORATION
+CONSOLIDATED INCOME STATEMENT
+For the Year Ended December 31, 2023
+(in thousands of dollars, except per share data)
+
+Revenue:
+    Product Sales                          $ 325,000
+    Service Revenue                           75,000
+Total Revenue                             $ 400,000
+
+Cost of Revenue:
+    Cost of Products Sold                  $ 195,000
+    Cost of Services                          37,500
+Total Cost of Revenue                     $ 232,500
+
+Gross Profit                              $ 167,500
+
+Operating Expenses:
+    Research and Development               $  32,000
+    Sales and Marketing                       45,000
+    General and Administrative                28,500
+    Depreciation and Amortization             15,000
+Total Operating Expenses                  $ 120,500
+
+Operating Income                          $  47,000
+
+Other Income (Expense):
+    Interest Income                        $   1,800
+    Interest Expense                          (7,500)
+    Foreign Exchange Gain (Loss)               (800)
+    Other Income, net                            500
+Total Other Income (Expense)              $  (6,000)
+
+Income Before Income Taxes                $  41,000
+Income Tax Expense                            10,250
+
+Net Income                                $  30,750
+
+Earnings Per Share:
+    Basic                                 $     3.08
+    Diluted                               $     3.02
+
+Weighted Average Shares Outstanding:
+    Basic                                     10,000
+    Diluted                                   10,200
+
+The accompanying notes are an integral part of these financial statements. 

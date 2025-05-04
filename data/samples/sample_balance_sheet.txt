@@ -1,0 +1,56 @@
+ABC CORPORATION
+BALANCE SHEET
+As of December 31, 2023
+(in thousands of dollars)
+
+ASSETS
+Current Assets:
+    Cash and Cash Equivalents              $  25,450
+    Short-term Investments                    12,300
+    Accounts Receivable, net                  18,750
+    Inventory                                 15,600
+    Prepaid Expenses                           2,100
+    Other Current Assets                       1,800
+Total Current Assets                       $  76,000
+
+Non-Current Assets:
+    Property, Plant and Equipment           $ 135,000
+    Less: Accumulated Depreciation           (45,000)
+    Net Property, Plant and Equipment         90,000
+    Goodwill                                  32,500
+    Intangible Assets                         18,700
+    Long-term Investments                     27,300
+    Deferred Tax Assets                        5,500
+Total Non-Current Assets                   $ 174,000
+
+TOTAL ASSETS                              $ 250,000
+
+LIABILITIES AND SHAREHOLDERS' EQUITY
+Current Liabilities:
+    Accounts Payable                       $  19,800
+    Short-term Debt                           10,500
+    Current Portion of Long-term Debt          5,000
+    Accrued Expenses                           7,800
+    Income Taxes Payable                       3,200
+    Deferred Revenue                           4,700
+Total Current Liabilities                 $  51,000
+
+Non-Current Liabilities:
+    Long-term Debt                         $  75,000
+    Pension Liabilities                       18,500
+    Deferred Tax Liabilities                   9,300
+    Other Long-term Liabilities                6,200
+Total Non-Current Liabilities             $ 109,000
+
+TOTAL LIABILITIES                         $ 160,000
+
+Shareholders' Equity:
+    Common Stock ($1 par value)            $  10,000
+    Additional Paid-in Capital                25,000
+    Retained Earnings                         60,000
+    Accumulated Other Comprehensive Income    (5,000)
+Total Shareholders' Equity                $  90,000
+
+TOTAL LIABILITIES AND SHAREHOLDERS' EQUITY $ 250,000
+
+The accompanying notes are an integral part of these financial statements. 

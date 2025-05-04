@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Document Intelligence System - WebSocket</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card-title {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button:disabled {
+            background-color: #bdc3c7;
+            cursor: not-allowed;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .tab-btn.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        #log {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+            background-color: #f9f9f9;
+            font-family: monospace;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+        }
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+        }
+        .log-entry.incoming {
+            color: #2980b9;
+        }
+        .log-entry.outgoing {
+            color: #27ae60;
+        }
+        .log-entry.error {
+            color: #c0392b;
+        }
+        .progress-container {
+            margin-top: 10px;
+            display: none;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-status {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        .connection-status {
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            margin-left: 10px;
+        }
+        .connection-status.connected {
+            background-color: #27ae60;
+            color: white;
+        }
+        .connection-status.disconnected {
+            background-color: #e74c3c;
+            color: white;
+        }
+        .connection-status.connecting {
+            background-color: #f39c12;
+            color: white;
+        }
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-actions {
+            display: flex;
+            gap: 5px;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8em;
+            border-radius: 3px;
+        }
+        .document-details-card {
+            background-color: #f9f9f9;
+            border: 1px solid #eee;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .document-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>
+            Financial Document Intelligence System
+            <span id="connectionStatus" class="connection-status disconnected">Disconnected</span>
+        </h1>
+        
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="log">WebSocket Log</button>
+            <button class="tab-btn" data-tab="scan">Scan Directory</button>
+            <button class="tab-btn" data-tab="documents">Documents</button>
+            <button class="tab-btn" data-tab="query">Query Documents</button>
+        </div>
+        
+        <!-- WebSocket Log Tab -->
+        <div id="log-tab" class="tab-content active">
+            <div class="card">
+                <h3 class="card-title">WebSocket Communication Log</h3>
+                <div id="log"></div>
+                <button id="clearLogBtn">Clear Log</button>
+                <button id="testConnectionBtn">Test Connection</button>
+                <button id="reconnectBtn">Reconnect</button>
+            </div>
+        </div>
+        
+        <!-- Scan Directory Tab -->
+        <div id="scan-tab" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">Scan Directory</h3>
+                <p>Click the button below to scan for financial documents:</p>
+                <button id="scanBtn">Scan Directory</button>
+                
+                <div id="scanProgress" class="progress-container">
+                    <h4>Scanning Progress:</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-status" id="progressStatus">Initializing scan...</div>
+                </div>
+                
+                <div id="scanResults" style="display: none;">
+                    <h4>Scan Results:</h4>
+                    <div id="fileCount"></div>
+                    <ul class="file-list" id="fileList"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Documents Tab -->
+        <div id="documents-tab" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">Browse Documents</h3>
+                <p>View and download documents that have been processed:</p>
+                <button id="loadDocumentsBtn">Load Documents</button>
+                
+                <div id="documentsList" style="display: none;">
+                    <h4>Available Documents:</h4>
+                    <div id="documentsCount"></div>
+                    <ul class="file-list" id="documentItems"></ul>
+                </div>
+                
+                <div id="documentDetails" style="display: none;">
+                    <h4>Document Details:</h4>
+                    <div id="documentDetailsContent"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Query Documents Tab -->
+        <div id="query-tab" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">Query Documents</h3>
+                <p>Ask questions about your financial documents:</p>
+                <textarea id="queryInput" rows="3" placeholder="Example: What is the total revenue for Q2 2024?"></textarea>
+                <button id="queryBtn">Submit Query</button>
+                
+                <div id="queryResults" style="display: none;">
+                    <h4>Query Results:</h4>
+                    <div id="queryResponse"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Global variables
+        let socket;
+        let wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        let wsUrl = `${wsProtocol}//${window.location.host}/ws`;
+        let isConnected = false;
+        let reconnectAttempts = 0;
+        let maxReconnectAttempts = 5;
+        let reconnectInterval = 3000; // 3 seconds
+        
+        // DOM Elements
+        const logElement = document.getElementById('log');
+        const connectionStatus = document.getElementById('connectionStatus');
+        const clearLogBtn = document.getElementById('clearLogBtn');
+        const testConnectionBtn = document.getElementById('testConnectionBtn');
+        const reconnectBtn = document.getElementById('reconnectBtn');
+        const scanBtn = document.getElementById('scanBtn');
+        const progressBar = document.getElementById('progressBar');
+        const progressStatus = document.getElementById('progressStatus');
+        const scanProgress = document.getElementById('scanProgress');
+        const scanResults = document.getElementById('scanResults');
+        const fileCount = document.getElementById('fileCount');
+        const fileList = document.getElementById('fileList');
+        const queryInput = document.getElementById('queryInput');
+        const queryBtn = document.getElementById('queryBtn');
+        const queryResults = document.getElementById('queryResults');
+        const queryResponse = document.getElementById('queryResponse');
+        
+        // Tab Navigation
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+                
+                // Update active button
+                tabBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Update active content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(tabId + '-tab').classList.add('active');
+            });
+        });
+        
+        // WebSocket Functions
+        function connectWebSocket() {
+            // Close existing connection if any
+            if (socket && socket.readyState !== WebSocket.CLOSED) {
+                socket.close();
+            }
+            
+            updateConnectionStatus('connecting');
+            logMessage('Connecting to WebSocket server...', 'outgoing');
+            
+            // Create new WebSocket connection
+            socket = new WebSocket(wsUrl);
+            
+            // Connection opened
+            socket.addEventListener('open', function(event) {
+                isConnected = true;
+                reconnectAttempts = 0;
+                updateConnectionStatus('connected');
+                logMessage('Connection established', 'incoming');
+                
+                // Enable buttons that require connection
+                scanBtn.disabled = false;
+                queryBtn.disabled = false;
+                testConnectionBtn.disabled = false;
+            });
+            
+            // Listen for messages
+            socket.addEventListener('message', function(event) {
+                handleMessage(event.data);
+            });
+            
+            // Connection closed
+            socket.addEventListener('close', function(event) {
+                isConnected = false;
+                updateConnectionStatus('disconnected');
+                logMessage('Connection closed', 'error');
+                
+                // Disable buttons that require connection
+                scanBtn.disabled = true;
+                queryBtn.disabled = true;
+                testConnectionBtn.disabled = true;
+                
+                // Attempt to reconnect if not explicitly disconnected
+                if (reconnectAttempts < maxReconnectAttempts) {
+                    reconnectAttempts++;
+                    logMessage(`Reconnecting in ${reconnectInterval/1000} seconds... (Attempt ${reconnectAttempts}/${maxReconnectAttempts})`, 'outgoing');
+                    setTimeout(connectWebSocket, reconnectInterval);
+                } else {
+                    logMessage('Maximum reconnection attempts reached. Please reconnect manually.', 'error');
+                }
+            });
+            
+            // Connection error
+            socket.addEventListener('error', function(event) {
+                updateConnectionStatus('disconnected');
+                logMessage('Connection error', 'error');
+            });
+        }
+        
+        function updateConnectionStatus(status) {
+            connectionStatus.className = 'connection-status ' + status;
+            connectionStatus.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+        }
+        
+        function sendMessage(messageObj) {
+            if (!isConnected) {
+                logMessage('Cannot send message: Not connected', 'error');
+                return false;
+            }
+            
+            try {
+                const messageStr = JSON.stringify(messageObj);
+                socket.send(messageStr);
+                logMessage('Sent: ' + messageStr, 'outgoing');
+                return true;
+            } catch (error) {
+                logMessage('Error sending message: ' + error.message, 'error');
+                return false;
+            }
+        }
+        
+        function handleMessage(data) {
+            logMessage('Received: ' + data, 'incoming');
+            
+            try {
+                const message = JSON.parse(data);
+                const messageType = message.type;
+                
+                switch (messageType) {
+                    case 'scan_progress':
+                        handleScanProgress(message.data);
+                        break;
+                    case 'scan_results':
+                        handleScanResults(message.data);
+                        break;
+                    case 'query_result':
+                        handleQueryResult(message.data);
+                        break;
+                    case 'error':
+                        logMessage('Error from server: ' + message.message, 'error');
+                        break;
+                }
+            } catch (error) {
+                logMessage('Error parsing message: ' + error.message, 'error');
+            }
+        }
+        
+        function logMessage(message, type = 'incoming') {
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry ' + type;
+            logEntry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logElement.appendChild(logEntry);
+            logElement.scrollTop = logElement.scrollHeight;
+        }
+        
+        // Handler Functions
+        function handleScanProgress(data) {
+            scanProgress.style.display = 'block';
+            
+            // Update progress bar
+            const percent = Math.round((data.progress / data.total) * 100);
+            progressBar.style.width = percent + '%';
+            progressStatus.textContent = data.message;
+            
+            // If scan is completed, update status
+            if (data.status === 'completed') {
+                progressStatus.textContent = 'Scan completed successfully';
+            }
+        }
+        
+        function handleScanResults(data) {
+            scanResults.style.display = 'block';
+            
+            // Display file count
+            if (data.files && data.files.length > 0) {
+                fileCount.textContent = `Found ${data.files.length} financial documents.`;
+                
+                // Clear previous file list
+                fileList.innerHTML = '';
+                
+                // Add files to the list
+                data.files.forEach(file => {
+                    const li = document.createElement('li');
+                    li.className = 'file-item';
+                    li.innerHTML = `
+                        <strong>${file.name}</strong> (${file.size})
+                        <div><small>Created: ${file.created || 'N/A'}</small></div>
+                    `;
+                    fileList.appendChild(li);
+                });
+            } else {
+                fileCount.textContent = 'No documents found.';
+            }
+        }
+        
+        function handleQueryResult(data) {
+            queryResults.style.display = 'block';
+            
+            if (data.status === 'success') {
+                queryResponse.innerHTML = `
+                    <div class="card">
+                        <p><strong>Query:</strong> ${data.query}</p>
+                        <p><strong>Answer:</strong> ${data.result}</p>
+                        ${data.source_documents ? `
+                        <p><strong>Source Documents:</strong></p>
+                        <ul>
+                            ${data.source_documents.map(doc => `
+                                <li>${doc.name} (Relevance: ${doc.relevance})</li>
+                            `).join('')}
+                        </ul>
+                        ` : ''}
+                    </div>
+                `;
+            } else {
+                queryResponse.innerHTML = `
+                    <div class="card">
+                        <p><strong>Error:</strong> ${data.message || 'An error occurred while processing your query.'}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Event Listeners
+        clearLogBtn.addEventListener('click', function() {
+            logElement.innerHTML = '';
+        });
+        
+        testConnectionBtn.addEventListener('click', function() {
+            sendMessage({
+                type: 'message',
+                data: 'Ping from client'
+            });
+        });
+        
+        reconnectBtn.addEventListener('click', function() {
+            connectWebSocket();
+        });
+        
+        scanBtn.addEventListener('click', function() {
+            // Reset scan UI
+            scanResults.style.display = 'none';
+            
+            // Send scan request
+            sendMessage({
+                type: 'scan_request',
+                data: {}
+            });
+        });
+        
+        queryBtn.addEventListener('click', function() {
+            const query = queryInput.value.trim();
+            
+            if (!query) {
+                alert('Please enter a query.');
+                return;
+            }
+            
+            // Reset query UI
+            queryResults.style.display = 'none';
+            
+            // Send query
+            sendMessage({
+                type: 'query',
+                query: query
+            });
+        });
+        
+        // Documents Tab Functions
+        const loadDocumentsBtn = document.getElementById('loadDocumentsBtn');
+        const documentsList = document.getElementById('documentsList');
+        const documentsCount = document.getElementById('documentsCount');
+        const documentItems = document.getElementById('documentItems');
+        const documentDetails = document.getElementById('documentDetails');
+        const documentDetailsContent = document.getElementById('documentDetailsContent');
+        
+        loadDocumentsBtn.addEventListener('click', function() {
+            // Fetch documents via API
+            fetch('/api/documents')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        displayDocuments(data.documents);
+                    } else {
+                        alert('Error loading documents: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading documents:', error);
+                    alert('Error loading documents: ' + error.message);
+                });
+        });
+        
+        function displayDocuments(documents) {
+            documentsList.style.display = 'block';
+            
+            if (documents.length === 0) {
+                documentsCount.textContent = 'No documents found. Please scan documents first.';
+                documentItems.innerHTML = '';
+                return;
+            }
+            
+            documentsCount.textContent = `Found ${documents.length} documents.`;
+            documentItems.innerHTML = '';
+            
+            documents.forEach(doc => {
+                const li = document.createElement('li');
+                li.className = 'file-item';
+                
+                const fileType = doc.file_type || 'unknown';
+                const fileIcon = getFileIcon(fileType);
+                
+                li.innerHTML = `
+                    <div class="file-item-content">
+                        <strong>${fileIcon} ${doc.name}</strong>
+                        <div><small>Size: ${doc.size || 'Unknown'}</small></div>
+                        <div><small>Created: ${doc.created || 'Unknown'}</small></div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="btn-sm view-document" data-id="${doc.id}">View Details</button>
+                        <button class="btn-sm download-document" data-id="${doc.id}" data-name="${doc.name}">Download</button>
+                        ${doc.hasOwnProperty('csv_path') ? `<button class="btn-sm download-csv" data-id="${doc.id}" data-name="${doc.name.replace(/\.[^/.]+$/, '')}_extracted.csv">Download CSV</button>` : ''}
+                    </div>
+                `;
+                
+                documentItems.appendChild(li);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-document').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const docId = this.getAttribute('data-id');
+                    viewDocumentDetails(docId);
+                });
+            });
+            
+            document.querySelectorAll('.download-document').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const docId = this.getAttribute('data-id');
+                    const fileName = this.getAttribute('data-name');
+                    downloadDocument(docId, fileName);
+                });
+            });
+            
+            document.querySelectorAll('.download-csv').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const fileName = this.getAttribute('data-name');
+                    downloadCsv(fileName);
+                });
+            });
+        }
+        
+        function getFileIcon(fileType) {
+            const icons = {
+                'pdf': '📄',
+                'csv': '📊',
+                'xlsx': '📊',
+                'docx': '📝',
+                'txt': '📄',
+                'json': '📋'
+            };
+            
+            return icons[fileType.toLowerCase()] || '📄';
+        }
+        
+        function viewDocumentDetails(docId) {
+            fetch(`/api/documents/${docId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        displayDocumentDetails(data.document);
+                    } else {
+                        alert('Error loading document details: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading document details:', error);
+                    alert('Error loading document details: ' + error.message);
+                });
+        }
+        
+        function displayDocumentDetails(doc) {
+            documentDetails.style.display = 'block';
+            
+            // Format extracted data if available
+            let extractedDataHtml = '';
+            if (doc.extracted_data) {
+                if (doc.extracted_data.entities && doc.extracted_data.entities.length > 0) {
+                    extractedDataHtml += '<p><strong>Extracted Entities:</strong></p><ul>';
+                    doc.extracted_data.entities.forEach(entity => {
+                        extractedDataHtml += `<li>${entity}</li>`;
+                    });
+                    extractedDataHtml += '</ul>';
+                }
+                
+                if (doc.extracted_data.summary) {
+                    extractedDataHtml += `<p><strong>Summary:</strong> ${doc.extracted_data.summary}</p>`;
+                }
+            }
+            
+            documentDetailsContent.innerHTML = `
+                <div class="document-details-card">
+                    <h3>${doc.name}</h3>
+                    <p><strong>ID:</strong> ${doc.id}</p>
+                    <p><strong>Size:</strong> ${doc.size || 'Unknown'}</p>
+                    <p><strong>Created:</strong> ${doc.created || 'Unknown'}</p>
+                    <p><strong>Last Modified:</strong> ${doc.last_modified || 'Unknown'}</p>
+                    <p><strong>File Type:</strong> ${doc.file_type || 'Unknown'}</p>
+                    <p><strong>Path:</strong> ${doc.path || 'Unknown'}</p>
+                    
+                    <h4>Extracted Data</h4>
+                    ${extractedDataHtml || '<p>No extracted data available.</p>'}
+                    
+                    <div class="document-actions">
+                        <button class="download-document" data-id="${doc.id}" data-name="${doc.name}">Download Document</button>
+                        ${doc.hasOwnProperty('csv_path') ? `<button class="download-csv" data-id="${doc.id}" data-name="${doc.name.replace(/\.[^/.]+$/, '')}_extracted.csv">Download CSV</button>` : ''}
+                    </div>
+                </div>
+            `;
+            
+            // Add event listeners to buttons
+            documentDetailsContent.querySelectorAll('.download-document').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const docId = this.getAttribute('data-id');
+                    const fileName = this.getAttribute('data-name');
+                    downloadDocument(docId, fileName);
+                });
+            });
+            
+            documentDetailsContent.querySelectorAll('.download-csv').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const fileName = this.getAttribute('data-name');
+                    downloadCsv(fileName);
+                });
+            });
+        }
+        
+        function downloadDocument(docId, fileName) {
+            // In a real application, this would download the actual file
+            // For this demo, we'll just show an alert
+            alert(`Downloading document: ${fileName}\n\nNote: This is a demo application using simulated data.`);
+            
+            // In a real application, you would do something like:
+            // window.location.href = `/api/documents/${docId}/download`;
+        }
+        
+        function downloadCsv(fileName) {
+            // Download the CSV
+            window.location.href = `/api/csv/${fileName}`;
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Disable buttons until connection is established
+            scanBtn.disabled = true;
+            queryBtn.disabled = true;
+            testConnectionBtn.disabled = true;
+            
+            // Connect to WebSocket server
+            connectWebSocket();
+        });
+    </script>
+</body>
+</html> 

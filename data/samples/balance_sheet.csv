@@ -1,0 +1,36 @@
+Report_Type,Balance Sheet
+Report_Period,Q1 2023
+Client_Name,Acme Corporation
+Report_Date,2023-03-31
+
+Account,Category,Amount
+Cash and Cash Equivalents,Assets,1250000
+Short-term Investments,Assets,750000
+Accounts Receivable,Assets,890000
+Inventory,Assets,560000
+Prepaid Expenses,Assets,125000
+Total Current Assets,Assets,3575000
+Property Plant and Equipment,Assets,4200000
+Accumulated Depreciation,Assets,-850000
+Goodwill,Assets,1200000
+Other Intangible Assets,Assets,750000
+Long-term Investments,Assets,1350000
+Total Non-Current Assets,Assets,6650000
+Total Assets,Assets,10225000
+Accounts Payable,Liabilities,420000
+Short-term Debt,Liabilities,650000
+Accrued Expenses,Liabilities,180000
+Income Tax Payable,Liabilities,320000
+Deferred Revenue,Liabilities,290000
+Total Current Liabilities,Liabilities,1860000
+Long-term Debt,Liabilities,3250000
+Deferred Tax Liabilities,Liabilities,420000
+Other Long-term Liabilities,Liabilities,175000
+Total Non-Current Liabilities,Liabilities,3845000
+Total Liabilities,Liabilities,5705000
+Common Stock,Equity,1500000
+Additional Paid-in Capital,Equity,1800000
+Retained Earnings,Equity,1320000
+Treasury Stock,Equity,-100000
+Total Shareholders' Equity,Equity,4520000
+Total Liabilities and Equity,Liabilities and Equity,10225000 

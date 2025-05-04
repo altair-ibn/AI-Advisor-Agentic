@@ -1,0 +1,19 @@
+Account,Q1 2024,Q2 2024
+Cash,125000,138000
+Accounts Receivable,56000,62000
+Inventory,34000,38000
+Prepaid Expenses,8000,7500
+Total Current Assets,223000,245500
+"Property, Plant & Equipment",450000,450000
+Accumulated Depreciation,-120000,-125000
+Total Fixed Assets,330000,325000
+Total Assets,553000,570500
+Accounts Payable,32000,28000
+Accrued Expenses,18000,22000
+Short-term Debt,25000,25000
+Total Current Liabilities,75000,75000
+Long-term Debt,180000,170000
+Total Liabilities,255000,245000
+Common Stock,200000,200000
+Retained Earnings,98000,125500
+Total Equity,298000,325500

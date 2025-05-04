@@ -1,0 +1,35 @@
+{
+  "report_type": "Audit Report",
+  "client": "ACME Corporation",
+  "period": "FY 2024 (Q1-Q2)",
+  "auditor": "Financial Intelligence LLC",
+  "date_issued": "2024-07-15",
+  "findings": [
+    {
+      "category": "Financial Controls",
+      "status": "Satisfactory",
+      "notes": "Appropriate controls are in place for financial reporting"
+    },
+    {
+      "category": "Accounting Practices",
+      "status": "Satisfactory",
+      "notes": "Follows GAAP standards consistently"
+    },
+    {
+      "category": "Expense Reporting",
+      "status": "Needs Improvement",
+      "notes": "Some inconsistencies in expense categorization were identified"
+    },
+    {
+      "category": "Tax Compliance",
+      "status": "Satisfactory",
+      "notes": "All tax filings were completed accurately and on time"
+    }
+  ],
+  "summary": "Overall, the financial statements present fairly, in all material respects, the financial position of ACME Corporation as of June 30, 2024.",
+  "recommendations": [
+    "Implement additional training for expense reporting procedures",
+    "Consider enhanced reconciliation processes for accounts receivable",
+    "Update financial control documentation to reflect recent system changes"
+  ]
+}

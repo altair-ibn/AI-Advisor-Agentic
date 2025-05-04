@@ -1,0 +1,26 @@
+
+ACME CORPORATION - TAX REPORT
+Fiscal Year: 2024
+Period: Q1-Q2
+EIN: 12-3456789
+
+SUMMARY OF TAXES PAID:
+Federal Income Tax: $3,840
+State Income Tax: $1,200
+Employment Taxes: $18,650
+Property Taxes: $8,400
+Total Taxes Paid: $32,090
+
+TAX DEDUCTIONS:
+Business Expenses: $277,200
+Depreciation: $5,000
+Interest: $5,000
+Total Deductions: $287,200
+
+TAXABLE INCOME:
+Gross Revenue: $660,000
+Net Taxable Income: $372,800
+Effective Tax Rate: 8.61%
+
+Prepared by: Financial Department
+Date: July 1, 2024

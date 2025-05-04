@@ -1,0 +1,210 @@
+{
+  "documents": {
+    "bank_statement.txt": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/bank_statement.txt",
+      "report_type": "income_statement",
+      "metadata": {
+        "report_type": "income_statement",
+        "extracted_at": "2025-05-04T09:48:24.771235",
+        "data_points": {
+          "has_tax": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/bank_statement.txt",
+        "extraction_time": "2025-05-04T09:48:24.771268"
+      }
+    },
+    "sample_income_statement.txt": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.txt",
+      "report_type": "income_statement",
+      "metadata": {
+        "report_type": "income_statement",
+        "extracted_at": "2025-05-04T09:48:30.836714",
+        "data_points": {
+          "has_revenue": true,
+          "has_expenses": true,
+          "has_income": true,
+          "has_profit": true,
+          "has_tax": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.txt",
+        "extraction_time": "2025-05-04T09:48:30.836738"
+      }
+    },
+    "sample_audit_report.pdf": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_audit_report.pdf",
+      "report_type": "annual_report",
+      "metadata": {
+        "report_type": "annual_report",
+        "extracted_at": "2025-05-04T09:48:31.167609",
+        "data_points": {},
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_audit_report.pdf",
+        "extraction_time": "2025-05-04T09:48:31.167651"
+      }
+    },
+    "sample_cash_flow.xlsx": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_cash_flow.xlsx",
+      "report_type": "cash_flow_statement",
+      "metadata": {
+        "report_type": "cash_flow_statement",
+        "extracted_at": "2025-05-04T09:48:32.307250",
+        "data_points": {},
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_cash_flow.xlsx",
+        "extraction_time": "2025-05-04T09:48:32.307264"
+      }
+    },
+    "sample_financial_notes.docx": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_financial_notes.docx",
+      "metadata": {
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_financial_notes.docx",
+        "document_type": "word_document",
+        "extraction_time": "2025-05-04T06:33:23.716685",
+        "file_info": {
+          "name": "sample_financial_notes.docx",
+          "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_financial_notes.docx",
+          "size": 102,
+          "created": "2025-05-04T01:33:53.551563",
+          "modified": "2025-05-04T01:33:53.551563",
+          "extension": ".docx"
+        }
+      }
+    },
+    "sample_balance_sheet.csv": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_balance_sheet.csv",
+      "report_type": "balance_sheet",
+      "metadata": {
+        "report_type": "balance_sheet",
+        "extracted_at": "2025-05-04T09:22:40.618247",
+        "data_points": {
+          "has_assets": true,
+          "has_liabilities": true,
+          "has_equity": true,
+          "has_cash": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_balance_sheet.csv",
+        "extraction_time": "2025-05-04T09:22:40.618377"
+      }
+    },
+    "sample_tax_report.txt": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_tax_report.txt",
+      "report_type": "annual_report",
+      "metadata": {
+        "report_type": "annual_report",
+        "extracted_at": "2025-05-04T09:48:38.525559",
+        "data_points": {
+          "has_revenue": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_tax_report.txt",
+        "extraction_time": "2025-05-04T09:48:38.525596"
+      }
+    },
+    "sample_income_statement.pdf": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.pdf",
+      "report_type": "income_statement",
+      "metadata": {
+        "report_type": "income_statement",
+        "extracted_at": "2025-05-04T09:48:38.581786",
+        "data_points": {},
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.pdf",
+        "extraction_time": "2025-05-04T09:48:38.581803"
+      }
+    },
+    "balance_sheet.csv": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/balance_sheet.csv",
+      "report_type": "balance_sheet",
+      "metadata": {
+        "report_type": "balance_sheet",
+        "extracted_at": "2025-05-04T09:48:41.633224",
+        "data_points": {},
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/balance_sheet.csv",
+        "extraction_time": "2025-05-04T09:48:41.633252"
+      }
+    },
+    "annual_report.txt": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/annual_report.txt",
+      "report_type": "annual_report",
+      "metadata": {
+        "report_type": "annual_report",
+        "extracted_at": "2025-05-04T09:48:44.644429",
+        "data_points": {
+          "has_revenue": true,
+          "has_profit": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/annual_report.txt",
+        "extraction_time": "2025-05-04T09:48:44.644565"
+      }
+    },
+    "sample_audit_report.json": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_audit_report.json",
+      "report_type": "annual_report",
+      "metadata": {
+        "report_type": "annual_report",
+        "extracted_at": "2025-05-04T09:48:44.863309",
+        "data_points": {},
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_audit_report.json",
+        "extraction_time": "2025-05-04T09:48:44.863348"
+      }
+    },
+    "income_statement.csv": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/income_statement.csv",
+      "report_type": "income_statement",
+      "metadata": {
+        "report_type": "income_statement",
+        "extracted_at": "2025-05-04T09:48:48.015052",
+        "data_points": {
+          "has_income": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/income_statement.csv",
+        "extraction_time": "2025-05-04T09:48:48.015084"
+      }
+    },
+    "sample_income_statement.csv": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.csv",
+      "report_type": "income_statement",
+      "metadata": {
+        "report_type": "income_statement",
+        "extracted_at": "2025-05-04T09:48:51.042929",
+        "data_points": {
+          "has_revenue": true,
+          "has_expenses": true,
+          "has_income": true,
+          "has_profit": true,
+          "has_tax": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_income_statement.csv",
+        "extraction_time": "2025-05-04T09:48:51.042967"
+      }
+    },
+    "sample_balance_sheet.txt": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_balance_sheet.txt",
+      "report_type": "balance_sheet",
+      "metadata": {
+        "report_type": "balance_sheet",
+        "extracted_at": "2025-05-04T09:48:54.051396",
+        "data_points": {
+          "has_assets": true,
+          "has_liabilities": true,
+          "has_equity": true,
+          "has_cash": true
+        },
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/sample_balance_sheet.txt",
+        "extraction_time": "2025-05-04T09:48:54.051412"
+      }
+    },
+    "metadata.json": {
+      "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/metadata.json",
+      "metadata": {
+        "file_path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/metadata.json",
+        "document_type": "json_document",
+        "extraction_time": "2025-05-04T06:28:20.275847",
+        "file_info": {
+          "name": "metadata.json",
+          "path": "/home/neuro/code/AI Financial Assistant/fin_assistant/data/samples/metadata.json",
+          "size": 10986,
+          "created": "2025-05-04T06:02:53.326287",
+          "modified": "2025-05-04T06:02:53.326287",
+          "extension": ".json"
+        }
+      }
+    }
+  }
+}

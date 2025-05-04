@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Document Intelligence System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+        .card-title {
+            margin-top: 0;
+            color: #2c3e50;
+            font-size: 1.2em;
+        }
+        .fixed-directory {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #dee2e6;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1em;
+            margin-bottom: 10px;
+        }
+        .tab-nav {
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            font-size: 1em;
+        }
+        .tab-btn.active {
+            color: #3498db;
+            border-bottom: 2px solid #3498db;
+            font-weight: bold;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        #results, #queryResults, #fileDetails {
+            margin-top: 20px;
+            display: none;
+        }
+        .file-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .file-item {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        .file-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn-sm {
+            padding: 5px 10px;
+            font-size: 0.8em;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 2s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+            vertical-align: middle;
+            display: none;
+        }
+        .progress-container {
+            margin-top: 20px;
+            display: none;
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: #eee;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #3498db;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        .progress-status {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .progress-current-file {
+            margin-top: 5px;
+            font-size: 0.8em;
+            font-family: monospace;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Financial Document Intelligence System</h1>
+        <div style="text-align: right; margin-bottom: 10px; font-size: 0.8em;">
+            Socket: <span id="connectionStatus">Connecting...</span>
+        </div>
+        
+        <div class="tab-nav">
+            <button class="tab-btn active" data-tab="scan">Scan Directory</button>
+            <button class="tab-btn" data-tab="browse">Browse Documents</button>
+            <button class="tab-btn" data-tab="query">Query Documents</button>
+        </div>
+        
+        <!-- Scan Directory Tab -->
+        <div id="scan-tab" class="tab-content active">
+            <div class="card">
+                <h3 class="card-title">Scan Directory</h3>
+                <p>The system is configured to scan the following fixed directory:</p>
+                <div class="fixed-directory" id="directoryPath"></div>
+                <p>Click the button below to scan this directory for financial documents:</p>
+                <button id="scanBtn">Scan Directory</button>
+                <span class="loader" id="scanLoader"></span>
+                
+                <!-- Progress bar for real-time updates -->
+                <div id="scanProgress" class="progress-container">
+                    <h4>Scanning Progress:</h4>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-status" id="progressStatus">Initializing scan...</div>
+                    <div class="progress-current-file" id="currentFile"></div>
+                </div>
+                
+                <div id="results">
+                    <h4>Scan Results:</h4>
+                    <p id="fileCount"></p>
+                    <ul class="file-list" id="fileList"></ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Browse Documents Tab -->
+        <div id="browse-tab" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">Browse Documents</h3>
+                <p>View and download documents from the test directory:</p>
+                <button id="loadDocumentsBtn">Load Documents</button>
+                <span class="loader" id="browseLoader"></span>
+                
+                <div id="documentsList">
+                    <h4>Available Documents:</h4>
+                    <ul class="file-list" id="documentsFileList"></ul>
+                </div>
+                
+                <div id="fileDetails">
+                    <h4>File Details:</h4>
+                    <div id="fileDetailsContent"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Query Documents Tab -->
+        <div id="query-tab" class="tab-content">
+            <div class="card">
+                <h3 class="card-title">Query Documents</h3>
+                <p>Ask questions about your financial documents:</p>
+                <textarea id="queryInput" rows="3" placeholder="Example: What is the total revenue for Q2 2024?"></textarea>
+                <button id="queryBtn">Submit Query</button>
+                <span class="loader" id="queryLoader"></span>
+                
+                <div id="queryResults">
+                    <h4>Query Results:</h4>
+                    <div id="queryResponseContent"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SocketIO Client Script -->
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Connect to SocketIO server with improved connection options
+            const wsUrl = window.location.protocol.replace('http', 'ws') + '//' + window.location.host;
+            console.log('Connecting to WebSocket at:', wsUrl);
+            const socket = io(wsUrl, {
+                transports: ['websocket'], // Force WebSocket transport only
+                reconnection: true,
+                reconnectionAttempts: 10,
+                reconnectionDelay: 1000,
+                reconnectionDelayMax: 5000,
+                timeout: 20000,
+                pingTimeout: 20000,
+                pingInterval: 10000
+            });
+            
+            // Socket.IO event handlers
+            socket.on('connect', function() {
+                console.log('Connected to SocketIO server with ID:', socket.id);
+                document.getElementById('connectionStatus').textContent = 'Connected';
+                document.getElementById('connectionStatus').style.color = '#28a745';
+            });
+            
+            socket.on('connect_error', function(error) {
+                console.error('Connection error:', error);
+                document.getElementById('connectionStatus').textContent = 'Connection Error';
+                document.getElementById('connectionStatus').style.color = '#dc3545';
+            });
+            
+            socket.on('disconnect', function() {
+                console.log('Disconnected from SocketIO server');
+                document.getElementById('connectionStatus').textContent = 'Disconnected';
+                document.getElementById('connectionStatus').style.color = '#dc3545';
+            });
+            
+            // Listen for scan progress updates
+            socket.on('scan_progress', function(data) {
+                console.log('Socket progress update:', data);
+                updateScanProgress(data);
+            });
+            
+            // Progress tracking elements
+            const scanProgress = document.getElementById('scanProgress');
+            const progressBar = document.getElementById('progressBar');
+            const progressStatus = document.getElementById('progressStatus');
+            const currentFile = document.getElementById('currentFile');
+            
+            // Function to update progress display
+            function updateScanProgress(data) {
+                const progressContainer = document.getElementById('scanProgressContainer');
+                const progressBar = document.getElementById('scanProgressBar');
+                const progressText = document.getElementById('scanProgressText');
+                
+                // Show progress container
+                progressContainer.style.display = 'block';
+                
+                // Update progress text
+                progressText.textContent = data.message || 'Processing...';
+                
+                // Update progress bar
+                if (data.total > 0) {
+                    const percent = Math.round((data.progress / data.total) * 100);
+                    progressBar.style.width = percent + '%';
+                    progressBar.textContent = percent + '%';
+                    progressBar.setAttribute('aria-valuenow', percent);
+                } else if (data.status === 'completed') {
+                    progressBar.style.width = '100%';
+                    progressBar.textContent = '100%';
+                    progressBar.setAttribute('aria-valuenow', 100);
+                    
+                    // Automatically load documents if scan completed
+                    if (data.status === 'completed') {
+                        setTimeout(loadDocuments, 1000);
+                    }
+                } else if (data.status === 'error') {
+                    progressBar.style.width = '100%';
+                    progressBar.classList.remove('bg-info');
+                    progressBar.classList.add('bg-danger');
+                    progressBar.textContent = 'Error';
+                }
+            }
+            
+            // Add polling for progress only as a backup for WebSockets
+            let progressPollingTimer = null;
+            
+            function startProgressPolling() {
+                // Clear any existing timer
+                if (progressPollingTimer) {
+                    clearInterval(progressPollingTimer);
+                }
+                
+                console.log('Starting minimal progress polling as WebSocket backup');
+                
+                // Start polling at a slower rate (1.5 seconds)
+                progressPollingTimer = setInterval(() => {
+                    // Only poll if socket is not connected
+                    if (!socket.connected) {
+                        fetch('/api/progress')
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Polled progress:', data);
+                                // Update if we have timestamp and status is not idle
+                                if (data.timestamp && data.status !== 'idle') {
+                                    updateScanProgress(data);
+                                }
+                                
+                                // Stop polling when completed or error
+                                if (data.status === 'completed' || data.status === 'error') {
+                                    stopProgressPolling();
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error polling progress:', error);
+                            });
+                    }
+                }, 1500);
+            }
+            
+            function stopProgressPolling() {
+                if (progressPollingTimer) {
+                    clearInterval(progressPollingTimer);
+                    progressPollingTimer = null;
+                }
+            }
+            
+            // Function to display scan results
+            function displayScanResults(data) {
+                results.style.display = 'block';
+                
+                if (data.status === 'success') {
+                    // Display scan results
+                    const resultText = data.scan_result.result;
+                    console.log("Raw result text:", resultText); // Debug
+                    
+                    // First try the enhanced parsing approach
+                    let files = parseFileListFromResultText(resultText);
+                    
+                    // If parsing failed, show the raw result
+                    if (files.length === 0) {
+                        fileCount.innerHTML = `<strong>Failed to parse document list.</strong> Raw result:<br><br>
+                            <div style="max-height: 400px; overflow-y: auto; padding: 10px; background: #f8f9fa; border-radius: 4px; white-space: pre-wrap;">${resultText}</div>`;
+                        
+                        // Try a very simple parsing as fallback
+                        const simpleRegex = /\*\*([^*]+)\*\*/g;
+                        const fileMatches = [...resultText.matchAll(simpleRegex)];
+                        
+                        if (fileMatches.length > 0) {
+                            files = fileMatches.map(match => ({
+                                name: match[1].trim(),
+                                size: "Unknown size",
+                                created: null
+                            }));
+                            
+                            fileCount.innerHTML = `<strong>Found ${files.length} financial documents</strong> (simple parsing mode):<br>
+                            <small>Detailed information unavailable - showing filenames only</small>`;
+                                            
+                            // Clear previous file list
+                            fileList.innerHTML = '';
+                            
+                            // Add files to the list
+                            files.forEach(file => {
+                                const li = document.createElement('li');
+                                li.className = 'file-item';
+                                li.innerHTML = `
+                                    <div>
+                                        <strong>${file.name}</strong>
+                                    </div>
+                                    <div class="file-actions">
+                                        <button class="btn-sm view-file" data-filename="${file.name}">View</button>
+                                    </div>
+                                `;
+                                fileList.appendChild(li);
+                            });
+                        }
+                    } else {
+                        fileCount.textContent = `Found ${files.length} financial documents.`;
+                        
+                        // Clear previous file list
+                        fileList.innerHTML = '';
+                        
+                        // Add files to the list
+                        files.forEach(file => {
+                            const li = document.createElement('li');
+                            li.className = 'file-item';
+                            li.innerHTML = `
+                                <div>
+                                    <strong>${file.name}</strong> (${file.size})
+                                    <div><small>Created: ${file.created || 'N/A'}</small></div>
+                                </div>
+                                <div class="file-actions">
+                                    <button class="btn-sm view-file" data-filename="${file.name}">View</button>
+                                </div>
+                            `;
+                            fileList.appendChild(li);
+                        });
+                    }
+                    
+                    // Add event listeners to view buttons
+                    setTimeout(() => {
+                        document.querySelectorAll('.view-file').forEach(btn => {
+                            btn.addEventListener('click', function() {
+                                const filename = this.getAttribute('data-filename');
+                                viewDocument(filename);
+                            });
+                        });
+                    }, 100);
+                } else {
+                    fileCount.textContent = 'Error scanning directory: ' + data.scan_result.message;
+                }
+            }
+            
+            // Tab Navigation
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+            
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active button
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update active content
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(tabId + '-tab').classList.add('active');
+                });
+            });
+            
+            // Scan Directory Tab
+            const scanBtn = document.getElementById('scanBtn');
+            const scanLoader = document.getElementById('scanLoader');
+            const results = document.getElementById('results');
+            const fileCount = document.getElementById('fileCount');
+            const fileList = document.getElementById('fileList');
+            
+            // Load Directory Path on page load
+            fetch('/api/scan')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('directoryPath').textContent = data.directory_path;
+                })
+                .catch(error => {
+                    console.error('Error fetching directory path:', error);
+                });
+            
+            // Add event listener to the scan button
+            scanBtn.addEventListener('click', function() {
+                scanLoader.style.display = 'inline-block';
+                scanBtn.disabled = true;
+                results.style.display = 'none';
+                
+                // Reset progress indicators
+                progressBar.style.width = '0%';
+                progressStatus.textContent = 'Initializing scan...';
+                currentFile.textContent = '';
+                scanProgress.style.display = 'block';
+                
+                // Start polling for progress updates
+                startProgressPolling();
+                
+                // Initiate scan
+                fetch('/api/scan')
+                    .catch(error => {
+                        console.error('Error initiating scan:', error);
+                        scanLoader.style.display = 'none';
+                        scanBtn.disabled = false;
+                        progressStatus.textContent = 'Error initiating scan: ' + error.message;
+                    });
+            });
+            
+            // Browse Documents Tab
+            const loadDocumentsBtn = document.getElementById('loadDocumentsBtn');
+            const browseLoader = document.getElementById('browseLoader');
+            const documentsFileList = document.getElementById('documentsFileList');
+            
+            loadDocumentsBtn.addEventListener('click', function() {
+                browseLoader.style.display = 'inline-block';
+                loadDocumentsBtn.disabled = true;
+                
+                fetch('/api/scan')
+                    .then(response => response.json())
+                    .then(data => {
+                        browseLoader.style.display = 'none';
+                        loadDocumentsBtn.disabled = false;
+                        
+                        if (data.status === 'success') {
+                            // Display documents
+                            const resultText = data.scan_result.result;
+                            const files = parseFileListFromResultText(resultText);
+                            
+                            // Clear previous file list
+                            documentsFileList.innerHTML = '';
+                            
+                            // Add files to the list
+                            files.forEach(file => {
+                                const li = document.createElement('li');
+                                li.className = 'file-item';
+                                li.innerHTML = `
+                                    <div>
+                                        <strong>${file.name}</strong>
+                                        <div><small>${file.size} | Created: ${file.created || 'N/A'}</small></div>
+                                    </div>
+                                    <div class="file-actions">
+                                        <button class="btn-sm view-document" data-filename="${file.name}">View</button>
+                                        <button class="btn-sm download-document" data-filename="${file.name}">Download</button>
+                                    </div>
+                                `;
+                                documentsFileList.appendChild(li);
+                            });
+                            
+                            // Add event listeners to the view and download buttons
+                            document.querySelectorAll('.view-document').forEach(btn => {
+                                btn.addEventListener('click', function() {
+                                    const filename = this.getAttribute('data-filename');
+                                    viewDocument(filename);
+                                });
+                            });
+                            
+                            document.querySelectorAll('.download-document').forEach(btn => {
+                                btn.addEventListener('click', function() {
+                                    const filename = this.getAttribute('data-filename');
+                                    downloadDocument(filename);
+                                });
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        browseLoader.style.display = 'none';
+                        loadDocumentsBtn.disabled = false;
+                        console.error('Error loading documents:', error);
+                    });
+            });
+            
+            // Query Documents Tab
+            const queryBtn = document.getElementById('queryBtn');
+            const queryLoader = document.getElementById('queryLoader');
+            const queryResults = document.getElementById('queryResults');
+            const queryResponseContent = document.getElementById('queryResponseContent');
+            const queryInput = document.getElementById('queryInput');
+            
+            queryBtn.addEventListener('click', function() {
+                const query = queryInput.value.trim();
+                
+                if (!query) {
+                    alert('Please enter a query.');
+                    return;
+                }
+                
+                queryLoader.style.display = 'inline-block';
+                queryBtn.disabled = true;
+                queryResults.style.display = 'none';
+                
+                // Search documents first
+                fetch('/api/documents')
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success' && data.documents.length > 0) {
+                            // Use the first document for query (for simplicity)
+                            const doc = data.documents[0];
+                            
+                            // Now query using the document ID
+                            return fetch('/api/query', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    query: query,
+                                    doc_id: doc.id
+                                })
+                            });
+                        } else {
+                            throw new Error('No documents available. Please scan the directory first.');
+                        }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        queryLoader.style.display = 'none';
+                        queryBtn.disabled = false;
+                        queryResults.style.display = 'block';
+                        
+                        if (data.status === 'success') {
+                            queryResponseContent.innerHTML = `
+                                <div class="card">
+                                    <p><strong>Query:</strong> ${data.query}</p>
+                                    <p><strong>Answer:</strong> ${data.result || data.answer || 'No answer available.'}</p>
+                                </div>
+                            `;
+                        } else {
+                            queryResponseContent.innerHTML = `
+                                <div class="card">
+                                    <p><strong>Error:</strong> ${data.message || 'An error occurred while processing your query.'}</p>
+                                </div>
+                            `;
+                        }
+                    })
+                    .catch(error => {
+                        queryLoader.style.display = 'none';
+                        queryBtn.disabled = false;
+                        queryResults.style.display = 'block';
+                        queryResponseContent.innerHTML = `
+                            <div class="card">
+                                <p><strong>Error:</strong> ${error.message}</p>
+                            </div>
+                        `;
+                        console.error('Error processing query:', error);
+                    });
+            });
+            
+            // Helper Functions
+            function parseFileListFromResultText(text) {
+                const files = [];
+                
+                // Debug: Log the full text to see its format
+                console.log("Full text to parse:", text);
+                
+                // If there's no text or it doesn't contain any recognizable format, return empty
+                if (!text || (!text.includes('**') && !text.includes('.csv') && !text.includes('.txt') && !text.includes('.json'))) {
+                    console.warn("Text doesn't contain recognizable file formats");
+                    return files;
+                }
+                
+                // Try multiple patterns to catch different output formats
+                
+                // Pattern 1: Numbered list format with asterisks
+                // Example: "1. **sample_balance_sheet.csv**\n   - Size: 574 bytes\n   - Created Date: 2024-05-03"
+                let match;
+                const pattern1 = /\d+\.\s+\*\*([^*]+)\*\*\s+[^\n]*Size:\s+([^\n]+)(?:[^\n]*Created\s+Date:\s+([^\n]*))?/g;
+                while ((match = pattern1.exec(text)) !== null) {
+                    files.push({
+                        name: match[1].trim(),
+                        size: match[2].trim(),
+                        created: match[3] ? match[3].trim() : null
+                    });
+                }
+                
+                // If pattern 1 found files, return them
+                if (files.length > 0) {
+                    console.log("Found files using pattern 1:", files);
+                    return files;
+                }
+                
+                // Pattern 2: Line by line scanning for files
+                // This is a fallback for when the markdown format is different
+                if (files.length === 0 && text.includes('**')) {
+                    const lines = text.split('\n');
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        const line = lines[i];
+                        if (line.includes('**') && (
+                            line.includes('.csv') || 
+                            line.includes('.txt') || 
+                            line.includes('.json') || 
+                            line.includes('.pdf') ||
+                            line.includes('.docx') ||
+                            line.includes('.xlsx'))) {
+                            // Try to extract the filename
+                            const filenameMatch = line.match(/\*\*([^*]+)\*\*/);
+                            if (filenameMatch) {
+                                const filename = filenameMatch[1].trim();
+                                
+                                // Look for size in the current or next lines
+                                let size = 'Unknown size';
+                                let created = null;
+                                
+                                // Look in current line for size
+                                const sizeMatch = line.match(/Size:\s*([^,\n]+)/);
+                                if (sizeMatch) {
+                                    size = sizeMatch[1].trim();
+                                }
+                                // Or look in next line
+                                else if (i + 1 < lines.length && lines[i + 1].includes('Size:')) {
+                                    const nextLineSizeMatch = lines[i + 1].match(/Size:\s*([^\n]+)/);
+                                    if (nextLineSizeMatch) {
+                                        size = nextLineSizeMatch[1].trim();
+                                    }
+                                }
+                                
+                                // Look for created date in nearby lines
+                                for (let j = i; j < Math.min(i + 3, lines.length); j++) {
+                                    if (lines[j].includes('Created')) {
+                                        const createdMatch = lines[j].match(/Created[^:]*:\s*([^\n]+)/);
+                                        if (createdMatch) {
+                                            created = createdMatch[1].trim();
+                                            break;
+                                        }
+                                    }
+                                }
+                                
+                                files.push({
+                                    name: filename,
+                                    size: size,
+                                    created: created
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                // Pattern 3: Simple document extraction
+                // This is a last resort when other patterns fail
+                if (files.length === 0) {
+                    const pattern3 = /\b([\w\s-]+\.(csv|txt|json|pdf|docx|xlsx))\b/g;
+                    while ((match = pattern3.exec(text)) !== null) {
+                        files.push({
+                            name: match[1].trim(),
+                            size: "Unknown size",
+                            created: null
+                        });
+                    }
+                }
+                
+                // Remove duplicates by filename
+                const uniqueFiles = files.filter((file, index, self) => 
+                    index === self.findIndex(f => f.name === file.name)
+                );
+                
+                console.log("Parsed files:", uniqueFiles);
+                return uniqueFiles;
+            }
+            
+            function viewDocument(filename) {
+                // For simplicity, just show file details - in a real app this would fetch and display content
+                const fileDetailsDiv = document.getElementById('fileDetails');
+                const fileDetailsContent = document.getElementById('fileDetailsContent');
+                
+                fileDetailsDiv.style.display = 'block';
+                fileDetailsContent.innerHTML = `
+                    <div class="card">
+                        <h4>${filename}</h4>
+                        <p>This is a preview of the document content.</p>
+                        <p>In a complete implementation, this would show the actual content of ${filename}.</p>
+                    </div>
+                `;
+            }
+            
+            function downloadDocument(filename) {
+                // In a real implementation, this would trigger a download
+                alert(`Download initiated for ${filename}. In a real implementation, this would download the actual file.`);
+            }
+        });
+    </script>
+</body>
+</html> 

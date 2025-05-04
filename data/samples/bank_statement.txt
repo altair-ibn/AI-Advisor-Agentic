@@ -1,0 +1,53 @@
+ABC FINANCIAL BANK
+STATEMENT OF ACCOUNT
+
+CUSTOMER: Acme Corporation 
+ACCOUNT NUMBER: 1234-5678-9012-3456
+ACCOUNT TYPE: Business Checking
+STATEMENT PERIOD: 01/01/2023 - 03/31/2023
+STATEMENT DATE: 03/31/2023
+
+SUMMARY:
+Beginning Balance: $245,890.45
+Total Deposits and Credits: $1,250,678.90
+Total Withdrawals and Debits: $985,321.67
+Ending Balance: $511,247.68
+
+TRANSACTION DETAILS:
+
+DATE        DESCRIPTION                                 AMOUNT          BALANCE
+01/03/2023  DEPOSIT                                     $125,000.00     $370,890.45
+01/05/2023  CHECK #1235                                 -$28,450.75     $342,439.70
+01/10/2023  WIRE TRANSFER FROM GLOBEX CORP              $90,500.00      $432,939.70
+01/15/2023  ACH PAYMENT - RENT                          -$12,500.00     $420,439.70
+01/18/2023  VENDOR PAYMENT - OFFICE SUPPLIES            -$3,245.89      $417,193.81
+01/20/2023  PAYROLL                                     -$87,650.00     $329,543.81
+01/25/2023  CUSTOMER PAYMENT - INVOICE #AC-2023-0112    $68,750.00      $398,293.81
+01/31/2023  INTEREST PAID                               $245.67         $398,539.48
+
+02/01/2023  QUARTERLY TAX PAYMENT                       -$95,000.00     $303,539.48
+02/05/2023  DEPOSIT                                     $150,000.00     $453,539.48
+02/10/2023  VENDOR PAYMENT - MANUFACTURING              -$78,650.00     $374,889.48
+02/15/2023  CUSTOMER PAYMENT - INVOICE #AC-2023-0118    $92,450.00      $467,339.48
+02/18/2023  INTERNATIONAL WIRE TRANSFER                 $125,678.90     $593,018.38
+02/20/2023  PAYROLL                                     -$89,750.00     $503,268.38
+02/25/2023  VENDOR PAYMENT - MARKETING                  -$45,600.00     $457,668.38
+02/28/2023  INTEREST PAID                               $320.45         $457,988.83
+
+03/03/2023  DEPOSIT                                     $175,000.00     $632,988.83
+03/05/2023  CHECK #1236                                 -$35,670.45     $597,318.38
+03/10/2023  CUSTOMER PAYMENT - INVOICE #AC-2023-0125    $83,450.00      $680,768.38
+03/15/2023  ACH PAYMENT - INSURANCE                     -$28,750.00     $652,018.38
+03/18/2023  VENDOR PAYMENT - IT SERVICES                -$24,890.00     $627,128.38
+03/20/2023  PAYROLL                                     -$92,780.00     $534,348.38
+03/25/2023  CUSTOMER PAYMENT - INVOICE #AC-2023-0131    $74,850.00      $609,198.38
+03/28/2023  VENDOR PAYMENT - CONSULTING                 -$98,234.58     $510,963.80
+03/31/2023  INTEREST PAID                               $283.88         $511,247.68
+
+ACCOUNT ANALYSIS:
+Average Daily Balance: $456,384.23
+Total Checks Processed: 2
+Total Electronic Transactions: 18
+Service Fees: $0.00
+
+For questions regarding this statement, please contact customer service at 1-800-555-1234 or email business@abcbank.com. 
